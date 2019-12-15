@@ -24,20 +24,20 @@ stages:
           inputs:
             restoreSolution: '$(solution)'
 
-        - task: VSBuild@1
+        - task: DotNetCoreCLI@2
           inputs:
-            solution: '$(solution)'
-            msbuildArgs: '/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:DesktopBuildPackageLocation="$(build.artifactStagingDirectory)\WebApp.zip" /p:DeployIisAppPath="Default Web Site"'
-            platform: '$(buildPlatform)'
-            configuration: '$(buildConfiguration)'
+            command: 'publish'
+            publishWebProjects: true
+            arguments: '**\DemoProject.csproj -c release -o $(System.DefaultWorkingDirectory)\Publish'
 
       - job: test 
         dependsOn: build
         steps:
-        - task: VSTest@2
+        - task: DotNetCoreCLI@2
           inputs:
-            platform: '$(buildPlatform)'
-            configuration: '$(buildConfiguration)'
+           command: 'test'
+           projects: '*.sln'
+
   - stage: "Deploy"
     jobs:
       - job: deploy
@@ -49,3 +49,15 @@ stages:
             appType: 'webApp'
             WebAppName: 'kyles-iq-demo'
             packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+
+      - job: ping
+        pool : server
+        steps:
+        - task: InvokeRESTAPI@1
+          inputs:
+            connectionType: 'connectedServiceName'
+            serviceConnection: 'ping endpoint'
+            method: 'GET'
+            headers: 
+            urlSuffix: '/ping'
+            waitForCompletion: 'false'
