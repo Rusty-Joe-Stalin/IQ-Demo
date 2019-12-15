@@ -9,7 +9,7 @@ variables:
   buildConfiguration: 'Release'
 
 stages: 
-  - stage: "Build_and_Test"
+  - stage: "Build_Test_Deploy"
     jobs:
       - job: build
         pool:
@@ -27,16 +27,10 @@ stages:
             publishWebProjects: true
             arguments: -c $(buildConfiguration) -f netcoreapp3.0
 
-      - job: test 
-        dependsOn: build
-        steps:
         - task: DotNetCoreCLI@2
           inputs:
            command: 'test'
 
-      - job: deploy
-        dependsOn: test
-        steps:
         - task: AzureRmWebAppDeployment@4
           inputs:
             ConnectionType: 'AzureRM'
@@ -45,8 +39,8 @@ stages:
             WebAppName: 'kyles-iq-demo'
             packageForLinux: '$(System.DefaultWorkingDirectory)/DemoProject/bin/Release/netcoreapp3.0/publish.zip'
 
-      - job: ping
-        dependsOn: deploy
+      - job: validate
+        dependsOn: build
         pool : server
         steps:
         - task: InvokeRESTAPI@1
