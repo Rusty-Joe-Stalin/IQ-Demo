@@ -37,10 +37,8 @@ stages:
           inputs:
            command: 'test'
 
-
-  - stage: "Deploy"
-    jobs:
       - job: deploy
+        dependsOn: build
         steps:
         - task: AzureRmWebAppDeployment@4
           inputs:
@@ -51,6 +49,7 @@ stages:
             packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
 
       - job: ping
+        dependsOn: deploy
         pool : server
         steps:
         - task: InvokeRESTAPI@1
