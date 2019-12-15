@@ -3,9 +3,6 @@
 # Add steps that publish symbols, save build artifacts, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
 
-trigger:
-- master
-
 variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
@@ -46,7 +43,7 @@ stages:
             azureSubscription: 'Free Trial(7b478fea-d20e-4b7e-b3bc-48a9e811376e)'
             appType: 'webApp'
             WebAppName: 'kyles-iq-demo'
-            packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
+            packageForLinux: '$(System.DefaultWorkingDirectory)/DemoProject/bin/Release/netcoreapp3.0/publish/*.zip'
 
       - job: ping
         dependsOn: deploy
