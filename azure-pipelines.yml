@@ -41,7 +41,6 @@ stages:
   - stage: "Deploy"
     jobs:
       - job: deploy
-        dependsOn: test
         steps:
         - task: AzureRmWebAppDeployment@4
           inputs:
