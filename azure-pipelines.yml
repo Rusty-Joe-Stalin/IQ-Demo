@@ -18,20 +18,24 @@ stages:
         - task: NuGetToolInstaller@1
 
         - task: NuGetCommand@2
+          displayName: restore Nuget packages
           inputs:
             restoreSolution: '$(solution)'
 
         - task: DotNetCoreCLI@2
+          displayName: publish zip package
           inputs:
             command: 'publish'
             publishWebProjects: true
             arguments: -c $(buildConfiguration) -f netcoreapp3.0
 
         - task: DotNetCoreCLI@2
+          displayName: run unit tests
           inputs:
            command: 'test'
 
         - task: AzureRmWebAppDeployment@4
+          displayName: deploy package to azure
           inputs:
             ConnectionType: 'AzureRM'
             azureSubscription: 'Free Trial(7b478fea-d20e-4b7e-b3bc-48a9e811376e)'
@@ -44,6 +48,7 @@ stages:
         pool : server
         steps:
         - task: InvokeRESTAPI@1
+          displayName: ping site
           inputs:
             connectionType: 'connectedServiceName'
             serviceConnection: 'ping endpoint'
