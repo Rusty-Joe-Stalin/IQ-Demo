@@ -35,7 +35,7 @@ stages:
            command: 'test'
 
       - job: deploy
-        dependsOn: build
+        dependsOn: test
         steps:
         - task: AzureRmWebAppDeployment@4
           inputs:
@@ -43,7 +43,7 @@ stages:
             azureSubscription: 'Free Trial(7b478fea-d20e-4b7e-b3bc-48a9e811376e)'
             appType: 'webApp'
             WebAppName: 'kyles-iq-demo'
-            packageForLinux: '$(System.DefaultWorkingDirectory)/DemoProject/bin/Release/netcoreapp3.0/publish/*.zip'
+            packageForLinux: '$(System.DefaultWorkingDirectory)/DemoProject/bin/Release/netcoreapp3.0/publish.zip'
 
       - job: ping
         dependsOn: deploy
