@@ -12,7 +12,7 @@ variables:
   buildConfiguration: 'Release'
 
 stages: 
-  - stage: Build and Test 
+  - stage: "Build_and_Test"
     jobs:
       - job: build
         pool:
@@ -38,7 +38,7 @@ stages:
           inputs:
             platform: '$(buildPlatform)'
             configuration: '$(buildConfiguration)'
-  - stage: Deploy
+  - stage: "Deploy"
     jobs:
       - job: deploy
         dependsOn: test
