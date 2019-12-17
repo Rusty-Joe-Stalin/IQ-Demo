@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
+using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System.Security.Policy;
 using RestSharp;
-using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 
 namespace DemoProject.Controllers
@@ -30,7 +24,7 @@ namespace DemoProject.Controllers
         }
 
         [HttpGet("dogs")]
-        public RedirectResult getDogPicAsync()
+        public RedirectResult GetDogPicAsync()
         {
             var client = new RestClient("https://dog.ceo/api/breeds/image/random");
 
@@ -42,7 +36,7 @@ namespace DemoProject.Controllers
 
             var result = JsonConvert.DeserializeObject<Result>(response.Content); 
 
-           return Redirect(result.message);
+            return Redirect(result.message);
 
         }
     }
